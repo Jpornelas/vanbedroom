@@ -60,8 +60,8 @@
     </form>
 </body>
 
-<!--<script src="transformcontrols.js"></script>-->
-<!--<script src="transform.js"></script>-->
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/gh/autodesk-forge/forge-extensions/public/extensions/transform/contents/main.css">
+<script src="transform.js"></script>
 
 
 <script>
@@ -88,7 +88,8 @@
 
             const div = document.getElementById('forgeViewer');
 
-            const config = { extensions: [ "Autodesk.Measure"] };
+            const config = {
+                extensions: ["Autodesk.Measure", "TransformationExtension"] };
 
             viewer = new Autodesk.Viewing.Private.GuiViewer3D(div, config);
             viewer.start();
