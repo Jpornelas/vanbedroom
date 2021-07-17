@@ -100,7 +100,47 @@
             });
         });
 
-        function onLoadFinished() {
+        async function onLoadFinished() {
+            // Load 'Autodesk.DataVisualization' and store it as a variable for later use
+            const dataVizExtn = await viewer.loadExtension("Autodesk.DataVisualization");
+
+            const DataVizCore = Autodesk.DataVisualization.Core;
+            const viewableType = DataVizCore.ViewableType.SPRITE;
+            const spriteColor = new THREE.Color(0xffffff);
+            const spriteIconUrl = `camera.svg`;
+
+            const style = new DataVizCore.ViewableStyle(
+                viewableType,
+                spriteColor,
+                spriteIconUrl
+            );
+
+            const viewableData = new DataVizCore.ViewableData();
+            viewableData.spriteSize = 24; // Sprites as points of size 24 x 24 pixels
+
+            const myDataList = [
+                { position: { x: 0, y: 0, z: 3 } }
+            ];
+
+            myDataList.forEach((myData, index) => {
+                const dbId = 10 + index;
+                const position = myData.position;
+                const viewable = new DataVizCore.SpriteViewable(position, style, dbId);
+
+                viewableData.addViewable(viewable);
+            });
+
+
+            await viewableData.finish();
+            dataVizExtn.addViewables(viewableData);
+
+            viewer.addEventListener(DataVizCore.MOUSE_CLICK, () => {
+                viewer.autocam.shotParams.destinationPercent = 3; // slow down camera movement
+                viewer.autocam.shotParams.duration = 5;
+                // move camera to hero view
+                viewer.setViewFromArray([-0.7721000326248607, 1.5015008146758586, 5.905511969074222, -0.21503496170043945, 1.8222104159422834, -0.39534123828118695, 0, 0, 1, 4.552631578947368, 0.9272952180016122, 38.22770553041278, 0]);
+            });
+
         }
     }
 
