@@ -101,6 +101,21 @@
         });
 
         async function onLoadFinished() {
+
+            //let geom = new THREE.BufferGeometry().fromGeometry(new THREE.BoxGeometry(1, 1, 1));
+            //let phongMaterial = new THREE.MeshPhongMaterial({
+            //    color: new THREE.Color(1, 0, 0)
+            //});
+            //let mesh = new THREE.Mesh(geom, phongMaterial);
+            //mesh.position.x = 0;
+            //mesh.position.y = 0;
+            //mesh.position.z = 0;
+            //if (!viewer.overlays.hasScene("CustomScene")) {
+            //    viewer.overlays.addScene("CustomScene");
+            //}
+            //viewer.overlays.addMesh(mesh, "CustomScene");
+            //viewer.impl.sceneUpdated(true);
+
             // Load 'Autodesk.DataVisualization' and store it as a variable for later use
             const dataVizExtn = await viewer.loadExtension("Autodesk.DataVisualization");
 
@@ -119,7 +134,7 @@
             viewableData.spriteSize = 24; // Sprites as points of size 24 x 24 pixels
 
             const myDataList = [
-                { position: { x: 0, y: 0, z: 3 } }
+                { position: { x: 0, y: 0, z: 0 } }
             ];
 
             myDataList.forEach((myData, index) => {
@@ -134,11 +149,19 @@
             await viewableData.finish();
             dataVizExtn.addViewables(viewableData);
 
-            viewer.addEventListener(DataVizCore.MOUSE_CLICK, () => {
-                viewer.autocam.shotParams.destinationPercent = 3; // slow down camera movement
-                viewer.autocam.shotParams.duration = 5;
-                // move camera to hero view
-                viewer.setViewFromArray([-0.7721000326248607, 1.5015008146758586, 5.905511969074222, -0.21503496170043945, 1.8222104159422834, -0.39534123828118695, 0, 0, 1, 4.552631578947368, 0.9272952180016122, 38.22770553041278, 0]);
+            const showViewables = true;
+            const enableOcclusion = true;
+            dataVizExtn.showHideViewables(showViewables, enableOcclusion);
+
+            viewer.addEventListener(Autodesk.DataVisualization.Core.MOUSE_CLICK, (event) => {
+                if (event.dbId == 10) {
+                    viewer.autocam.shotParams.destinationPercent = 3; // slow down camera movement
+                    viewer.autocam.shotParams.duration = 5;
+                    // move camera to hero view
+                    viewer.setViewFromArray([-1.1704135071294364, 0.9839835392606764, 5.415084076724055, -3.1677908028560893, 9.286121472460838, 6.060334363678042, 0, 0, 1, 4.552631578947368, 0.9272952180016122, 30.59824973291569, 0]);
+                    viewer.toolController.activateTool('bimwalk');
+                    viewer.getExtension('Autodesk.BimWalk').activate();
+                }
             });
 
         }
